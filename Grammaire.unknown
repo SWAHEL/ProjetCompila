@@ -1,0 +1,73 @@
+<PROGRAM> ::= "program" <ID> ";" <BLOCK> "."
+
+<BLOCK> ::= <CONSTS> <VARS> <PROCS_FUNCS> <INSTS>
+
+<CONSTS> ::= "const" <ID> "=" <NUM> ";" { <ID> "=" <NUM> ";" } | ε
+
+<VARS> ::= "var" <VAR_DECL> ";" { <VAR_DECL> ";" } | ε
+
+<VAR_DECL> ::= <ID> ":" <TYPE> 
+             | <ID> "[" <NUM> ".." <NUM> "]" "of" <TYPE> 
+             | <ID> { "," <ID> } ":" <TYPE>
+
+<TYPE> ::= "integer" 
+         | "real" 
+         | "char" 
+         | "boolean" 
+         | "array" "[" <NUM> ".." <NUM> "]" "of" <TYPE>
+         | "record" { <FIELD> ":" <TYPE> ";" } "end"
+
+<FIELD> ::= <ID>
+
+<PROCS_FUNCS> ::= <PROC> | <FUNC> | ε
+
+<PROC> ::= "procedure" <ID> "(" <PARAMS> ")" ";" <BLOCK>
+<FUNC> ::= "function" <ID> ":" <TYPE> "(" <PARAMS> ")" ";" <BLOCK>
+
+<PARAMS> ::= <ID> ":" <TYPE> { "," <ID> ":" <TYPE> } 
+           | "var" <ID> ":" <TYPE> { "," "var" <ID> ":" <TYPE> }
+
+<INSTS> ::= "begin" <INST> { ";" <INST> } "end"
+
+<INST> ::= <AFFEC> 
+         | <SI> 
+         | <TANTQUE> 
+         | <REPEAT> 
+         | <ECRIRE> 
+         | <LIRE> 
+         | <POUR> 
+         | <CAS> 
+         | ε
+
+<AFFEC> ::= <ID> ":=" <EXPR>
+
+<SI> ::= "if" <COND> "then" <INST> [ "else" <INST> ]
+
+<TANTQUE> ::= "while" <COND> "do" <INST>
+
+<REPEAT> ::= "repeat" <INST> "until" <COND>
+
+<ECRIRE> ::= "write" "(" <EXPR> { "," <EXPR> } ")"
+<LIRE> ::= "read" "(" <ID> { "," <ID> } ")"
+
+<POUR> ::= "for" <ID> ":=" <EXPR> "to" <EXPR> "do" <INST>
+         | "for" <ID> ":=" <EXPR> "downto" <EXPR> "do" <INST>
+
+<CAS> ::= "case" <EXPR> "of" <CLAUSE> { ";" <CLAUSE> } [ "else" <INST> ] "end"
+
+<CLAUSE> ::= <EXPR> ":" <INST>
+
+<COND> ::= <EXPR> <RELOP> <EXPR>
+<RELOP> ::= "=" | "<>" | "<" | ">" | "<=" | ">="
+
+<EXPR> ::= <TERM> { <ADDOP> <TERM> }
+<ADDOP> ::= "+" | "-"
+<TERM> ::= <FACT> { <MULOP> <FACT> }
+<MULOP> ::= "*" | "/"
+<FACT> ::= <ID> 
+         | <ID> "[" <EXPR> "]" 
+         | <NUM> 
+         | "(" <EXPR> ")"
+
+<ID> ::= <LETTRE> { <LETTRE> | <CHIFFRE> }
+<NUM> ::= <CHIFFRE> { <CHIFFRE> }
